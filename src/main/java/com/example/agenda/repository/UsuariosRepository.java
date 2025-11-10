@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface UsuariosRepository extends JpaRepository<Usuarios, Integer> {
     Usuarios findByNombreUsuarioAndPassword(String nombreUsuario, String password);
     java.util.List<Usuarios> findByActivoTrue();
+    boolean existsByNombreUsuario(String nombreUsuario);
 }

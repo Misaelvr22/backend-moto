@@ -12,7 +12,12 @@ public class UsuariosService {
     @Autowired
     UsuariosRepository repo;
 
-    public Usuarios crear(Usuarios u) { return repo.save(u); }
+    public Usuarios crear(Usuarios u) {
+        if (repo.existsByNombreUsuario(u.getNombreUsuario())) {
+            throw new RuntimeException("El nombre de usuario ya existe");
+        }
+        return repo.save(u);
+    }
 
     public List<Usuarios> listar() { return repo.findByActivoTrue(); }
     

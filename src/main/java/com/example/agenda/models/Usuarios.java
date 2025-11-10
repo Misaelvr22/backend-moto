@@ -17,7 +17,7 @@ public class Usuarios {
     @Column (name = "id_usuario")
     int idUsuario;
 
-    @Column (name = "nombre_usuario", nullable = false, length = 40)
+    @Column (name = "nombre_usuario", nullable = false, length = 40, unique = true)
     String nombreUsuario;
 
     @Column (name = "nombre_pila", nullable = true, length = 40)

@@ -2,8 +2,12 @@ package com.example.agenda.controllers;
 
 import com.example.agenda.models.Usuarios;
 import com.example.agenda.services.UsuariosService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -17,8 +21,15 @@ public class UsuariosController {
     }
 
     @PostMapping("/crear")
-    public Usuarios crear(@RequestBody Usuarios u) {
-        return service.crear(u);
+    public ResponseEntity<?> crear(@RequestBody Usuarios u) {
+        try {
+            Usuarios usuario = service.crear(u);
+            return ResponseEntity.ok(usuario);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     @GetMapping("/listar")
