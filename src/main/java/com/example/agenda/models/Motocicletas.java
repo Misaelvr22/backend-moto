@@ -24,9 +24,6 @@ public class Motocicletas {
     @Column(name = "modelo")
     String modelo;
 
-    @Column(name = "serie")
-    String serie;
-
     @Column(name = "year")
     int year;
 
