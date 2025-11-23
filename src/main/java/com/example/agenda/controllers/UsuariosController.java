@@ -48,9 +48,17 @@ public class UsuariosController {
     }
 
     @PutMapping("/editar")
-    public Usuarios editar(@RequestBody Usuarios u) {
-        return service.editar(u);
+    public ResponseEntity<?> editar(@RequestBody Usuarios u) {
+        try {
+            Usuarios usuarioActualizado = service.editar(u);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
+
 
     // 🔹 Para el usuario normal (borrado lógico)
     @DeleteMapping("/eliminar-logico/{id}")

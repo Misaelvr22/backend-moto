@@ -13,9 +13,7 @@ public class UsuariosService {
     UsuariosRepository repo;
 
     public Usuarios crear(Usuarios u) {
-        if (repo.existsByNombreUsuario(u.getNombreUsuario())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
-        }
+        validacionesUsuario(u, true);
         return repo.save(u);
     }
 
@@ -23,8 +21,11 @@ public class UsuariosService {
     
     public List<Usuarios> listarTodos() { return repo.findAll(); }
 
-    public Usuarios editar(Usuarios u) { return repo.save(u); }
-    
+    public Usuarios editar(Usuarios u) {
+        validacionesUsuario(u, false);
+        return repo.save(u); 
+    }
+
     public String reactivar(int id) {
         Usuarios u = repo.findById(id).orElse(null);
         if (u != null) {
@@ -46,4 +47,15 @@ public class UsuariosService {
         repo.deleteById(id);
         return "Usuario eliminado permanentemente";
     }
+
+private void validacionesUsuario(Usuarios u, boolean isNew) {
+        if (isNew && repo.existsByNombreUsuario(u.getNombreUsuario())) {
+            throw new RuntimeException("El nombre de usuario ya existe");
+        }
+
+        if (u.getPassword() == null || u.getPassword().length() < 8) {
+            throw new RuntimeException("La contraseña debe tener al menos 8 caracteres");
+        }
+    }
+
 }
