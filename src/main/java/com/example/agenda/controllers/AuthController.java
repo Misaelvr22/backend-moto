@@ -16,16 +16,19 @@ public class AuthController {
     @Autowired
     UsuariosRepository repo;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Usuarios u) {
-        Usuarios user = repo.findByNombreUsuarioAndPassword(u.getNombreUsuario(), u.getPassword());
-        if (user == null) {
-            return ResponseEntity.status(401)
-                .body(java.util.Map.of("error", "Credenciales inválidas"));
-        }
-        return ResponseEntity.ok(user);
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody Usuarios u) {
+    Usuarios user = repo.findByNombreUsuario(u.getNombreUsuario());
+    if (user == null) {
+        return ResponseEntity.status(401)
+            .body(java.util.Map.of("error", "Usuario no encontrado"));
     }
-
+    if (!user.getPassword().equals(u.getPassword())) {
+        return ResponseEntity.status(401)
+            .body(java.util.Map.of("error", "Contraseña incorrecta"));
+    }
+    return ResponseEntity.ok(user);
+}
     @PostConstruct
     public void initAdmin() {
         Usuarios u = repo.findByNombreUsuarioAndPassword("admin", "tallermoto1234");
